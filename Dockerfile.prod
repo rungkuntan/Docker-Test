@@ -1,0 +1,14 @@
+
+# STAGE-1 : Build React
+FROM	node:18-alpine as builder
+WORKDIR	/app
+
+COPY	package*.json .
+RUN		npm install
+
+COPY	. .
+RUN 	npm run build
+
+# STAGE-2 : Prepare Nginx
+FROM	nginx
+COPY --from=builder /app/build  /usr/share/nginx/html
